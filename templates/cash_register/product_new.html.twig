@@ -1,0 +1,33 @@
+{% extends 'cash_register/layout.html.twig' %}
+
+{% block title %}Caisse · Nouvel article{% endblock %}
+
+{% block body %}
+<div class="events-page">
+    <h1 class="logo">Nouvel <span>article</span></h1>
+
+    <p>
+        {% if event %}
+            <a class="back-link" href="{{ path('cash_register_event', {id: event.id}) }}">← Retour à la caisse · {{ event.name }}</a>
+        {% else %}
+            <a class="back-link" href="{{ path('cash_register_index') }}">← Évènements</a>
+        {% endif %}
+    </p>
+
+    {% for message in app.flashes('success') %}
+        <div class="flash-success">{{ message }}</div>
+    {% endfor %}
+
+    {{ form_start(form, {attr: {class: 'product-form'}}) }}
+        {{ form_row(form.reference) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.price) }}
+        {{ form_row(form.emoji) }}
+        {{ form_row(form.category) }}
+        {{ form_row(form.newCategory) }}
+        {{ form_row(form.active) }}
+
+        <button type="submit" class="btn btn-pay">✓ Créer l'article</button>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

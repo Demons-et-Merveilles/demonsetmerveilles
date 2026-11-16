@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block titre %}Magic The Gathering - Démons et Merveilles{% endblock %}
+
+{% block contenu %}
+<div class="div-centre pancarte" style="flex-direction: column;">
+
+    <img class="pancarte-image" src="{{ asset('images/mtg.jpg') }}" alt="MTG">
+
+    <p class="contenu">
+        Chez Démons et Merveilles, nous proposons régulièrement des sessions de <strong>découverte</strong> de
+        Magic: The Gathering. Pas besoin de connaître les règles ni d'avoir vos propres cartes : nous vous prêtons
+        un deck et vous expliquons les bases, que vous soyez complètement novice ou simplement curieux d'essayer.
+    </p>
+
+    <p class="contenu">
+        Magic: The Gathering est un jeu de cartes à collectionner où chaque joueur incarne un mage et affronte son
+        adversaire à l'aide d'un deck de sorts et de créatures. Le but est de réduire les points de vie de
+        l'adversaire (généralement 20 au départ) à zéro, en invoquant des créatures, en lançant des sorts et en
+        gérant intelligemment son mana, la ressource qui permet de tout jouer.
+    </p>
+
+    <p class="contenu">
+        Débutant, confirmé ou vétéran, vous êtes tous invités à nous rejoindre pour taper du carton !
+    </p>
+
+</div>
+{% endblock %}

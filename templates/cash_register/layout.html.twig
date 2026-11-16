@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Caisse{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="{{ asset('css/cash_register.css') }}" rel="stylesheet">
+</head>
+<body>
+    {% block body %}{% endblock %}
+
+    {# Si jQuery est déjà chargé par ton layout principal, supprime cette ligne #}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    {% block javascripts %}{% endblock %}
+</body>
+</html>

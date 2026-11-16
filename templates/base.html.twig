@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet"/>
+    {# Petits ajustements propres à la version Symfony (liens du menu) #}
+    <link href="{{ asset('css/ajouts.css') }}" rel="stylesheet"/>
+    <title>{% block titre %}Démons et Merveilles{% endblock %}</title>
+</head>
+
+<body class="bgmed">
+
+{# Menu principal #}
+<div class="menu">
+    <div class="menugauche">
+        <a class="menu-button" href="{{ path('app_accueil') }}">Accueil</a>
+        <a class="menu-button" href="{{ path('app_page', {page: 'agenda'}) }}">Agenda</a>
+        <a class="menu-button" href="{{ path('app_jdrs') }}">JDRs et Invités</a>
+    </div>
+
+    <a href="{{ path("app_login") }}"><img id="logo" src="{{ asset('images/demPNG.png') }}" alt="Logo Démons et Merveilles"> </a>
+
+    <div class="menudroite">
+        <a class="menu-button" href="{{ path('app_page', {page: 'mtg'}) }}">Magic The Gathering</a>
+        <a class="menu-button" href="{{ path('app_page', {page: 'bloodbowl'}) }}">BloodBowl</a>
+        <a class="menu-button" href="{{ path('app_page', {page: 'concours-peinture'}) }}">Concours de Peinture</a>
+    </div>
+</div>
+
+<div id="page-content" style="height: 100%;">
+    {% block contenu %}{% endblock %}
+</div>
+
+{# jQuery servi depuis un CDN #}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+{% block javascripts %}{% endblock %}
+</body>
+</html>

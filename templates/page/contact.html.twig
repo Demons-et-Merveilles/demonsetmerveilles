@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block titre %}Contact - Démons et Merveilles{% endblock %}
+
+{% block contenu %}
+<div class="div-centre pancarte" style="flex-direction: column;">
+    <h1 class="titre"> Rejoignez notre aventure</h1>
+    <div class="contact">
+        {% include '_reseaux.html.twig' %}
+    </div>
+</div>
+{% endblock %}

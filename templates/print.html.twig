@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet"/>
+    <title>Démons et Merveilles</title>
+</head>
+
+<body class="bgmed">
+
+<div class="menu">
+    <img id="logo" src="{{ asset('images/demPNG.png') }}" alt="Logo Démons et Merveilles">
+    <br/>
+</div>
+<div class="menu">
+    Démons & Merveilles
+</div>
+
+<div id="page-content">
+    <div class="card-container notprinted">
+        <div class="cardDouble invite notprinted">
+            <div class="card-content">
+                <span class="card-title">
+                    <label for="selectToPrint"> Selectionnez votre JDR </label>
+                </span>
+                <span class="card-mastering" style="margin-top:20px;">
+                    <select id="selectToPrint" style="width:60vw" class="select">
+                        <option selected value="-1"> - - - </option>
+                        {% for jdr in jdrs %}
+                            <option value="{{ jdr.id }}">{{ jdr.title|default('') }} ({{ jdr.mastering|default('') }})</option>
+                        {% endfor %}
+                    </select>
+                </span>
+                <span class="card-mastering" style="margin-top:20px;">
+                    <button id="boutonImprimer" class="button">🖨️ Imprimer</button>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    {# Toutes les fiches sont générées côté serveur, masquées ; jQuery affiche celle choisie #}
+    <div class="card-container" id="cardToPrint">
+        <p id="aucune-carte" hidden>Aucune carte sélectionnée.</p>
+        {% for jdr in jdrs %}
+            <div class="carte-impression" data-id="{{ jdr.id }}" data-titre="{{ jdr.title|default('') }}" hidden>
+                {{ include('_carte.html.twig', {carte: jdr, impression: true}) }}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="{{ asset('js/impression.js') }}"></script>
+</body>
+</html>

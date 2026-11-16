@@ -1,0 +1,31 @@
+{# Fragment chargé dans la modale d'historique : une ligne de tableau par article vendu #}
+<table id="history-table">
+    <thead>
+        <tr>
+            <th>ID Panier</th>
+            <th>ID Article</th>
+            <th>Nom</th>
+            <th>Qté</th>
+            <th>Prix unit.</th>
+            <th>Sous-total</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for sale in sales %}
+            {% for line in sale.lines %}
+                <tr>
+                    <td class="cell-accent cell-small">{{ sale.reference }}</td>
+                    <td>{{ line.productReference }}</td>
+                    <td>{{ line.productName }}</td>
+                    <td class="cell-center">{{ line.quantity }}</td>
+                    <td>{{ line.unitPrice|number_format(2, ',', ' ') }} €</td>
+                    <td class="cell-accent">{{ line.subtotal|number_format(2, ',', ' ') }} €</td>
+                    <td class="cell-small">{{ sale.createdAt|date('d/m/Y H:i:s') }}</td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr><td colspan="7" class="history-empty">Aucune vente enregistrée</td></tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,157 @@
+{% extends 'cash_register/layout.html.twig' %}
+
+{% block title %}Caisse · {{ event.name }}{% endblock %}
+
+{% block body %}
+{# Les URLs et le jeton CSRF sont lus par cash_register.js #}
+<div id="app"
+     data-event-name="{{ event.name }}"
+     data-sale-url="{{ path('cash_register_sale', {id: event.id}) }}"
+     data-history-url="{{ path('cash_register_history', {id: event.id}) }}"
+     data-history-import-url="{{ path('cash_register_history_import', {id: event.id}) }}"
+     data-catalog-import-url="{{ path('cash_register_catalog_import') }}"
+     data-csrf-token="{{ csrf_token('cash_register') }}">
+
+    {# ── SIDEBAR ── #}
+    <aside id="sidebar">
+        <div id="total-panel">
+            <div class="total-label">Total à payer</div>
+            <div id="total-display">0,00 €</div>
+            <div class="total-sub"><span id="item-count">0 article</span></div>
+        </div>
+
+        <div id="cart-panel">
+            <div class="cart-empty" id="cart-empty">
+                <div class="cart-empty-icon">🛒</div>
+                <span>Panier vide</span>
+            </div>
+            <div id="cart-items"></div>
+        </div>
+
+        <div id="actions-panel">
+            <button type="button" class="btn btn-pay" id="btn-pay" disabled>✓ Encaisser</button>
+            <button type="button" class="btn btn-clear" id="btn-clear" disabled>✕ Vider le panier</button>
+            <div class="sep"></div>
+            <div class="btn-row">
+                <button type="button" class="btn btn-history" id="btn-history">Historique</button>
+                <button type="button" class="btn btn-import" id="btn-import-catalog">Charger JSON</button>
+            </div>
+        </div>
+    </aside>
+
+    {# ── MAIN ── #}
+    <main id="main">
+        <div id="header">
+            <div class="logo">Caisse <span>· {{ event.name }}</span></div>
+            <a class="back-link" href="{{ path('cash_register_index') }}">← Évènements</a>
+            <a class="back-link" href="{{ path('cash_register_product_new', {event: event.id}) }}">+ Nouvel article</a>
+            <div id="clock"></div>
+        </div>
+
+        <div id="toolbar">
+            <input type="text" id="search" placeholder="Rechercher un article…" autocomplete="off">
+            <div id="category-filters">
+                <button type="button" class="filter-btn active" data-category="all">Tous</button>
+                {% for category in categories %}
+                    <button type="button" class="filter-btn" data-category="{{ category.id }}">{{ category.name }}</button>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div id="grid-container">
+            <div id="products-grid">
+                {% for product in products %}
+                    <div class="product-card"
+                         data-id="{{ product.id }}"
+                         data-name="{{ product.name }}"
+                         data-emoji="{{ product.emoji ?? '📦' }}"
+                         data-price="{{ product.price }}"
+                         data-category="{{ product.category.id }}"
+                         data-search="{{ (product.name ~ ' ' ~ product.reference)|lower }}">
+                        <div class="card-badge"></div>
+                        <span class="card-emoji">{{ product.emoji ?? '📦' }}</span>
+                        <div class="card-name">{{ product.name }}</div>
+                        <div class="card-cat">{{ product.category.name }}</div>
+                        <div><span class="card-price">{{ product.price|number_format(2, ',', ' ') }} €</span></div>
+                    </div>
+                {% endfor %}
+
+                <div class="no-results" id="no-results" {% if products is not empty %}hidden{% endif %}>Aucun article trouvé</div>
+            </div>
+        </div>
+    </main>
+</div>
+
+{# ── MODALE ENCAISSEMENT ── #}
+<div class="modal-overlay" id="modal-receipt">
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title">🧾 Récapitulatif</div>
+            <button type="button" class="modal-close" data-close-modal="modal-receipt">✕</button>
+        </div>
+        <div id="receipt-items"></div>
+        <div class="receipt-total-row">
+            <span>Total</span>
+            <span id="receipt-total">0,00 €</span>
+        </div>
+        <div class="receipt-meta" id="receipt-meta"></div>
+        <button type="button" class="btn btn-confirm-pay" id="btn-confirm-pay">✓ Valider le paiement</button>
+    </div>
+</div>
+
+{# ── MODALE HISTORIQUE ── #}
+<div class="modal-overlay" id="modal-history">
+    <div class="modal modal-wide">
+        <div class="modal-header">
+            <div class="modal-title">📊 Historique · {{ event.name }}</div>
+            <button type="button" class="modal-close" data-close-modal="modal-history">✕</button>
+        </div>
+        {# Rempli en AJAX avec cash_register/_history.html.twig #}
+        <div id="history-table-wrap"></div>
+        <div class="export-row">
+            <a class="btn btn-export" href="{{ path('cash_register_history_export', {id: event.id}) }}">⬇ Exporter historique JSON</a>
+            <button type="button" class="btn btn-export" id="btn-import-history">⬆ Importer historique JSON</button>
+            <a class="btn btn-export" href="{{ path('cash_register_catalog_export') }}">⬇ Exporter catalogue JSON</a>
+        </div>
+    </div>
+</div>
+
+<div id="pay-success">
+    <div class="pay-success-icon">✅</div>
+    <div class="pay-success-text">Paiement enregistré !</div>
+</div>
+
+<div id="toast"></div>
+
+<input type="file" id="file-catalog-input" accept=".json" hidden>
+<input type="file" id="file-history-input" accept=".json" hidden>
+
+{# Modèles HTML clonés par le JS : le texte est injecté avec .text(), donc sans risque d'injection #}
+<template id="cart-item-template">
+    <div class="cart-item">
+        <div class="cart-item-emoji"></div>
+        <div class="cart-item-info">
+            <div class="cart-item-name"></div>
+            <div class="cart-item-price"></div>
+        </div>
+        <div class="cart-item-controls">
+            <button type="button" class="qty-btn remove" data-action="remove" title="Retirer">−</button>
+            <span class="cart-qty"></span>
+            <button type="button" class="qty-btn" data-action="add" title="Ajouter">+</button>
+        </div>
+        <div class="cart-item-total"></div>
+    </div>
+</template>
+
+<template id="receipt-row-template">
+    <div class="receipt-row">
+        <span class="rname"></span>
+        <span class="rqty"></span>
+        <span class="rprice"></span>
+    </div>
+</template>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/cash_register.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block titre %}JDRs et Invités - Démons et Merveilles{% endblock %}
+
+{% block contenu %}
+<div class="card-container">
+    {# Les cartes viennent de data/jdr.json via JdrService #}
+    {% for carte in cartes %}
+        {{ include('_carte.html.twig', {carte: carte}) }}
+    {% endfor %}
+</div>
+{% endblock %}

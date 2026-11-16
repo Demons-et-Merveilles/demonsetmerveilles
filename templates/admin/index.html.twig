@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block titre %}Administration - Démons et Merveilles{% endblock %}
+
+{% block contenu %}
+    <div class="div-centre pancarte" style="flex-direction: column;">
+        <h1 class="titre"> Administration </h1>
+        <p class="contenu">Connecté en tant que {{ app.user.userIdentifier }}.</p>
+        <p><a class="button" href="{{ path('app_logout') }}">Se déconnecter</a></p>
+    </div>
+{% endblock %}

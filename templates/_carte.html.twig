@@ -1,0 +1,34 @@
+{#
+    Carte de JDR / invité / animation.
+    Variables :
+      - carte      : entrée de data/jdr.json
+      - impression : true pour la version imprimable (sans lien ni horaire, jamais "double")
+    La description est affichée telle quelle (|raw) : elle peut contenir du HTML dans jdr.json.
+#}
+{% set impression = impression|default(false) %}
+{% set type = carte.type|default('') %}
+{% set taille = (not impression and carte.format|default('') == 'double') ? 'Double' : '' %}
+{% set maitrise = type == 'jdr' ? 'Masterisé par ' ~ carte.mastering|default('') : carte.mastering|default('') %}
+
+<div class="card{{ taille }} {{ type }}">
+    <div class="card-image-container">
+        <img class="card-image" src="{{ carte.image|default('') }}" alt="Logo du JDR">
+    </div>
+
+    <hr class="card-hr"/>
+    <div class="card-content">
+        <span class="card-title">{{ carte.title|default('') }}</span>
+        <span class="card-description">{{ carte.description|default('')|raw }}</span>
+        <span class="card-mastering">
+            <h3>
+                {{ maitrise }}
+                {% if not impression and carte.link|default %}
+                    <a href="{{ carte.link }}" style="color:lightblue"> {{ carte.desclink|default('') }} {{ carte.link }} </a>
+                {% endif %}
+            </h3>
+            {% if not impression %}
+                <h3>{{ carte.horaire|default('') }}</h3>
+            {% endif %}
+        </span>
+    </div>
+</div>

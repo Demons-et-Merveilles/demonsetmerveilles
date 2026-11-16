@@ -1,0 +1,40 @@
+{% extends 'cash_register/layout.html.twig' %}
+
+{% block title %}Caisse · Évènements{% endblock %}
+
+{% block body %}
+<div class="events-page">
+    <h1 class="logo">Caisse <span>· Évènements</span></h1>
+
+    <p><a class="back-link" href="{{ path('cash_register_product_new') }}">+ Nouvel article</a></p>
+
+    {% for message in app.flashes('error') %}
+        <div class="flash-error">{{ message }}</div>
+    {% endfor %}
+
+    <ul class="events-list">
+        {% for event in events %}
+            <li>
+                <a class="event-card" href="{{ path('cash_register_event', {id: event.id}) }}">
+                    <span class="event-name">{{ event.name }}</span>
+                    <span class="event-meta">
+                        {% if event.startsAt %}{{ event.startsAt|date('d/m/Y') }} · {% endif %}
+                        {{ event.salesCount }} vente{{ event.salesCount > 1 ? 's' : '' }}
+                        · {{ event.total|number_format(2, ',', ' ') }} €
+                    </span>
+                </a>
+            </li>
+        {% else %}
+            <li class="no-results">Aucun évènement, créez-en un ci-dessous</li>
+        {% endfor %}
+    </ul>
+
+    <form class="event-form" method="post" action="{{ path('cash_register_event_new') }}">
+        <input type="hidden" name="_token" value="{{ csrf_token('cash_register') }}">
+        <input type="text" name="name" placeholder="Nom (ex. Convention 2026)" maxlength="150" required>
+        <input type="date" name="startsAt" title="Date de début (optionnelle)">
+        <input type="date" name="endsAt" title="Date de fin (optionnelle)">
+        <button type="submit" class="btn btn-pay">+ Créer</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+parameters:
+    # Date du compte à rebours des portes ouvertes (page /portes-ouvertes)
+    app.date_portes_ouvertes: '2026-05-08T14:00:00'
+    # Fichier source des cartes JDR / invités
+    app.fichier_jdrs: '%kernel.project_dir%/data/jdr.json'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/Kernel.php'
+
+    App\Service\JdrService:
+        arguments:
+            $fichierJdrs: '%app.fichier_jdrs%'

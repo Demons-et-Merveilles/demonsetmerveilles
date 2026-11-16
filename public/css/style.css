@@ -1,0 +1,478 @@
+/* ============================================================
+   DÉMONS & MERVEILLES — feuille de style
+   Thème inspiré de l'affiche "Les Mondes de Démons & Merveilles" :
+   nuit fantastique bleu nuit / indigo, dorure gravée, bannières
+   bordeaux façon "démon", plaques façon parchemin pour le contenu.
+   ============================================================ */
+
+/* ---- Polices (Google Fonts) : une police de titre gravée +
+   une police de corps de texte "vieux grimoire" ---- */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+
+/* ---- Jetons de design (couleurs, rayons, ombres) ---- */
+:root {
+    --bg-deep: #0a1024;
+    --bg-mid: #131b34;
+    --bg-mid-2: #1c2748;
+    --gold: #c9a24a;
+    --gold-light: #e8d38f;
+    --gold-dim: #8a6f2f;
+    --maroon: #7a1620;
+    --maroon-dark: #4a0e14;
+    --parchment: #f3e7c9;
+    --parchment-dark: #e2cf9c;
+    --ink: #3a2a18;
+    --ink-soft: #5a4527;
+    --teal-glow: #4a70f3;
+    --shadow-deep: 0 10px 30px rgba(0, 0, 0, 0.55);
+    --radius-plaque: 10px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body.bgmed {
+    /* Ciel nocturne dégradé, façon veillée devant un château lointain */
+    background:
+        radial-gradient(ellipse at 20% -10%, rgba(122, 22, 32, 0.35), transparent 45%),
+        radial-gradient(ellipse at 85% 0%, rgba(111, 214, 230, 0.12), transparent 40%),
+        linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-mid) 45%, var(--bg-mid-2) 100%);
+    background-attachment: fixed;
+    color: var(--parchment);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* ============================================================
+   MENU PRINCIPAL — bannière gravée façon fronton de château
+   ============================================================ */
+
+.menu {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.6rem 1.5rem;
+    background: linear-gradient(180deg, #10182f 0%, #0a1024 100%);
+    border-bottom: 3px solid var(--gold);
+    box-shadow: var(--shadow-deep);
+    flex-wrap: wrap;
+}
+
+.menugauche, .menudroite {
+    display: flex;
+    gap: 0.5rem;
+    flex: 1;
+    flex-wrap: wrap;
+}
+
+.menudroite {
+    justify-content: flex-end;
+}
+
+#logo {
+    height: 72px;
+    filter: drop-shadow(0 0 10px rgba(201, 162, 74, 0.55));
+}
+
+.menu-button {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    color: var(--gold-light);
+    padding: 0.55rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    white-space: nowrap;
+}
+
+.menu-button:hover {
+    color: var(--bg-deep);
+    background: var(--gold);
+    border-color: var(--gold-light);
+}
+
+/* ============================================================
+   TITRES ET TEXTES COURANTS
+   ============================================================ */
+
+h1, h2, h3, .titre, .title {
+    font-family: 'Cinzel', serif;
+    color: var(--gold-light);
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+    margin-top: 0;
+}
+
+h3 {
+    color: var(--shadow-deep) !important;
+}
+.title {
+    font-size: 1.9rem;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.titre {
+    font-size: 1.4rem;
+    border-bottom: 2px solid var(--gold-dim);
+    padding-bottom: 0.4rem;
+    margin-bottom: 0.8rem;
+}
+
+a {
+    color: var(--teal-glow);
+    cursor: pointer;
+}
+
+a:hover {
+    color: var(--shadow-deep);
+}
+
+/* ============================================================
+   BLOCS DE CONTENU — "plaques" façon parchemin, comme les
+   pancartes en bois/or de l'affiche
+   ============================================================ */
+
+.div-centre {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem 1.5rem;
+}
+
+.pancarte {
+    background: linear-gradient(180deg, var(--parchment) 0%, var(--parchment-dark) 100%);
+    color: var(--ink);
+    border: 3px solid var(--gold);
+    border-radius: var(--radius-plaque);
+    box-shadow: var(--shadow-deep), inset 0 0 0 1px rgba(122, 22, 32, 0.25);
+    padding: 1.8rem 2.2rem;
+    margin: 1.5rem auto;
+    max-width: 900px;
+}
+
+.pancarte .titre, .pancarte h1 {
+    color: var(--maroon);
+    text-shadow: none;
+    border-bottom-color: var(--maroon);
+}
+
+.pancarte-image {
+    max-width: 100%;
+    max-height: 320px;
+    border-radius: 6px;
+    border: 2px solid var(--gold-dim);
+    margin-bottom: 1rem;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+.contenu {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    text-align: left;
+    white-space: pre-line;
+}
+
+/* Bannière de convention (affiche promotionnelle) */
+.banniere-convention {
+    display: block;
+    max-width: 100%;
+    margin: 1.5rem auto;
+    border-radius: var(--radius-plaque);
+    border: 3px solid var(--gold);
+    box-shadow: var(--shadow-deep);
+}
+
+/* ============================================================
+   AGENDA
+   ============================================================ */
+
+.div-agenda {
+    padding: 1.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.div-agenda iframe {
+    border: 3px solid var(--gold);
+    border-radius: var(--radius-plaque);
+    box-shadow: var(--shadow-deep);
+    min-height: 600px;
+}
+
+/* ============================================================
+   CONTACT — icônes réseaux façon sceaux dorés
+   ============================================================ */
+
+.contact {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.logo-contact {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    padding: 6px;
+    background: var(--parchment);
+    border: 2px solid var(--gold);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.logo-contact:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 0 16px rgba(201, 162, 74, 0.7);
+}
+
+/* ============================================================
+   COMPTE À REBOURS
+   ============================================================ */
+
+#countdown {
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    white-space: pre-line;
+    text-align: center;
+}
+
+/* ============================================================
+   CARTES DE JDR — façon écriteaux de convention
+   ============================================================ */
+
+.card-container {
+    /* Grille à 2 colonnes : une carte simple = 1 colonne, une carte double = les 2 colonnes (pleine largeur) */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    padding: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card, .cardDouble {
+    background: linear-gradient(180deg, var(--parchment) 0%, var(--parchment-dark) 100%);
+    color: var(--ink);
+    border: 3px solid var(--gold);
+    border-radius: var(--radius-plaque);
+    box-shadow: var(--shadow-deep);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cardDouble {
+    /* Occupe les 2 colonnes de la grille : pleine largeur */
+    grid-column: 1 / -1;
+}
+
+.card:hover, .cardDouble:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.6);
+}
+
+.card-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 160px;
+    overflow: hidden;
+    border-radius: 6px;
+}
+
+.card-image {
+    max-width: 100%;
+    max-height: 220px;
+    border-radius: 6px;
+    border: 2px solid var(--gold-dim);
+}
+
+.card-hr {
+    width: 100%;
+    border: none;
+    border-top: 2px solid var(--maroon);
+    margin: 0.8rem 0;
+}
+
+.card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    flex: 1;
+}
+
+.card-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--maroon);
+}
+
+.card-description {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 1rem;
+    color: var(--ink-soft);
+    white-space: pre-line;
+}
+
+.card-mastering {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 0.95rem;
+    color: var(--ink);
+    margin-top: auto;
+}
+
+/* Carte d'introduction (type "invite") mise en valeur en bordeaux */
+.invite {
+    background: linear-gradient(180deg, #8a1c27 0%, var(--maroon-dark) 100%);
+    color: var(--parchment);
+    border-color: var(--gold-light);
+}
+
+.invite .card-title {
+    color: var(--gold-light);
+}
+
+.invite .card-description {
+    color: var(--parchment-dark);
+}
+
+/* ============================================================
+   FORMULAIRES / BOUTONS (page d'impression)
+   ============================================================ */
+
+.select, select {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 1rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 2px solid var(--gold-dim);
+    background: var(--parchment);
+    color: var(--ink);
+}
+
+.button, button {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    background: linear-gradient(180deg, var(--gold-light) 0%, var(--gold) 100%);
+    color: var(--bg-deep);
+    border: 2px solid var(--gold-dim);
+    border-radius: 6px;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.button:hover, button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(201, 162, 74, 0.5);
+}
+
+/* ============================================================
+   CHARGEMENT / ERREUR
+   ============================================================ */
+
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 3rem;
+    font-family: 'Cinzel', serif;
+    color: var(--gold-light);
+}
+
+.spinner {
+    width: 42px;
+    height: 42px;
+    border: 4px solid rgba(201, 162, 74, 0.25);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: tourner 0.9s linear infinite;
+}
+
+@keyframes tourner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.error {
+    max-width: 700px;
+    margin: 2rem auto;
+    padding: 1.2rem 1.5rem;
+    background: var(--maroon-dark);
+    color: var(--parchment);
+    border: 2px solid var(--gold);
+    border-radius: var(--radius-plaque);
+    text-align: center;
+}
+
+/* ============================================================
+   IMPRESSION — on repasse en sobre/clair pour économiser l'encre
+   ============================================================ */
+
+@media print {
+    body.bgmed {
+        background: #fff;
+        color: #000;
+    }
+
+    .notprinted {
+        display: none !important;
+    }
+
+    .card, .cardDouble {
+        border: 2px solid #000;
+        box-shadow: none;
+        color: #000;
+        background: #fff;
+    }
+
+    .card-title, .titre {
+        color: #000;
+        text-shadow: none;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 720px) {
+    .menu {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .menugauche, .menudroite {
+        justify-content: center;
+    }
+
+    .card-container {
+        /* Une seule colonne sur mobile : plus de place pour lire chaque fiche */
+        grid-template-columns: 1fr;
+    }
+
+    .pancarte {
+        padding: 1.3rem;
+    }
+}

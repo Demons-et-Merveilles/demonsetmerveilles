@@ -1,0 +1,3 @@
+# Charge toutes les routes déclarées via #[Route] dans src/Controller
+controllers:
+    resource: routing.controllers

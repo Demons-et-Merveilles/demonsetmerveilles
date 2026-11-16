@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block contenu %}
+<div class="div-centre">
+    <h1 class="title">
+        BIENVENUE CHEZ DÉMONS & MERVEILLES
+        <p> Consulte notre <a href="{{ path('app_page', {page: 'agenda'}) }}" style="color:#66D3FA;cursor: pointer;"> Agenda </a> pour savoir quand nous retrouver ! </p>
+    </h1>
+</div>
+
+<div class="div-centre">
+    <img class="banniere-convention" src="{{ asset('images/dm-conv2026.png') }}" alt="Affiche de la convention Les Mondes de Démons et Merveilles 2026">
+</div>
+
+<div class="div-centre pancarte" style="flex-direction: column;">
+    <h1 class="titre"> Nous vous attendons ! </h1>
+    <p class="contenu">
+        Nos aventuriers ont pour habitude de se réunir à la Fabrique de Rouelles, 151 Rue Adèle Robert, 76610 Le Havre.
+    </p>
+    <p>
+        {% include '_reseaux.html.twig' %}
+    </p>
+</div>
+{% endblock %}
