@@ -97,12 +97,11 @@ class PublishedJdrType extends AbstractType
             ])
 
             // ── Image et affichage ──
-            // Champ non mappé : le fichier est traité par JdrImageStorage dans le contrôleur
             ->add('image', FileType::class, [
                 'label' => 'Image',
                 'mapped' => false,
                 'required' => false,
-                'help' => 'JPG, PNG, WEBP ou GIF — 3 Mo maximum.',
+                'help' => 'JPG, PNG, WEBP ou GIF — 10 Mo maximum.',
                 'attr' => ['accept' => 'image/jpeg,image/png,image/webp,image/gif'],
                 'row_attr' => ['class' => 'champ-large champ-image'],
             ])

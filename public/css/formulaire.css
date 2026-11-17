@@ -1,60 +1,81 @@
 /* ============================================================
-   FORMULAIRE DE JDR — thème parchemin / dorure
-   S'appuie sur les variables de style.css (--gold, --maroon, --ink…)
+   FORMULAIRE DE JDR — version "carrée" et responsive
+   Angles droits, grille à 12 colonnes, champs de même hauteur.
+   S'appuie sur les variables de style.css (--gold, --maroon, --ink…).
    Structure : .jdr-form > fieldset.jdr-section > .champ (label, champ, aide, erreurs)
+   Classes de largeur (posées via row_attr dans PublishedJdrType) :
+     .champ-large = toute la ligne · .champ-demi = moitié · .champ-tiers = un tiers
    ============================================================ */
 
-.conteneur-formulaire {
+/* ---- Conteneur : la pancarte devient un cadre carré ---- */
+.pancarte.conteneur-formulaire {
     width: calc(100% - 2rem);
-    max-width: 880px;
+    max-width: 960px;
+    padding: clamp(1rem, 3vw, 2.2rem);
+    border-radius: 0;
 }
 
 .jdr-form {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 1.3rem;
+    gap: 1.8rem;
     text-align: left;
 }
 
-/* ---- Sections (cadres dorés) ---- */
+/* ---- Sections : cadre droit, titre en onglet bordeaux ---- */
 .jdr-section {
     margin: 0;
-    padding: 1.1rem 1.3rem 1.3rem;
+    min-width: 0;
+    padding: 1.6rem clamp(1rem, 2.5vw, 1.6rem) 1.6rem;
     border: 2px solid var(--gold-dim);
-    border-radius: var(--radius-plaque);
-    background: rgba(255, 255, 255, 0.35);
+    border-radius: 0;
+    background: rgba(255, 255, 255, 0.4);
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem 1.3rem;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 1.2rem 1.5rem;
 }
 
 .jdr-section legend {
-    padding: 0 0.7rem;
+    margin-left: 0.8rem;
+    padding: 0.35rem 1rem;
     font-family: 'Cinzel', serif;
     font-weight: 700;
-    font-size: 1.05rem;
-    letter-spacing: 0.04em;
-    color: var(--maroon);
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--parchment);
+    background: var(--maroon);
+    border-radius: 0;
 }
 
-/* ---- Un champ ---- */
+/* ---- Un champ : par défaut une demi-ligne ---- */
 .champ {
+    grid-column: span 6;
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
-    min-width: 0; /* évite qu'un champ large déborde de la grille */
+    gap: 0.4rem;
+    min-width: 0; /* un champ large ne déborde jamais de la grille */
 }
 
 .champ-large {
     grid-column: 1 / -1;
 }
 
+.champ-demi {
+    grid-column: span 6;
+}
+
+.champ-tiers {
+    grid-column: span 4;
+}
+
 .champ label {
     font-family: 'Cinzel', serif;
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
     color: var(--ink);
 }
 
@@ -64,26 +85,39 @@
     color: var(--maroon);
 }
 
+/* ---- Champs texte, listes, zone de texte : même hauteur, angles droits ---- */
 .champ input[type="text"],
 .champ input[type="url"],
 .champ input[type="number"],
 .champ select,
 .champ textarea {
     width: 100%;
-    padding: 0.55rem 0.7rem;
+    min-height: 2.9rem;
+    padding: 0.6rem 0.8rem;
     font-family: 'EB Garamond', Georgia, serif;
     font-size: 1.05rem;
     color: var(--ink);
-    background: #fffdf6;
+    background-color: #fffdf6;
     border: 2px solid var(--gold-dim);
-    border-radius: 6px;
+    border-radius: 0;
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .champ textarea {
+    min-height: 9rem;
     resize: vertical;
-    min-height: 8rem;
     line-height: 1.45;
+}
+
+/* Liste déroulante : flèche carrée personnalisée */
+.champ select {
+    padding-right: 2.6rem;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%237a1620' stroke-width='2'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.9rem center;
+    background-size: 0.8rem;
+    cursor: pointer;
 }
 
 .champ input::placeholder,
@@ -103,13 +137,14 @@
 .champ textarea:focus {
     outline: none;
     border-color: var(--maroon);
-    box-shadow: 0 0 0 3px rgba(201, 162, 74, 0.45);
+    box-shadow: inset 0 0 0 1px var(--maroon), 0 0 0 3px rgba(201, 162, 74, 0.45);
 }
 
 /* ---- Aide et erreurs ---- */
 .aide {
     font-size: 0.85rem;
     font-style: italic;
+    line-height: 1.35;
     color: var(--ink-soft);
 }
 
@@ -120,13 +155,16 @@
 }
 
 .erreurs li {
+    padding: 0.35rem 0.7rem;
     font-size: 0.9rem;
     font-weight: 600;
     color: #8c1b1b;
+    background: #fdebe8;
+    border-left: 4px solid #b3261e;
 }
 
-.erreurs li::before {
-    content: '⚠ ';
+.erreurs li + li {
+    margin-top: 0.25rem;
 }
 
 .champ-erreur input[type="text"],
@@ -135,35 +173,70 @@
 .champ-erreur select,
 .champ-erreur textarea {
     border-color: #b3261e;
-    background: #fff3f1;
+    background-color: #fff6f4;
 }
 
 /* Erreurs globales du formulaire (ex : jeton CSRF expiré) */
-.jdr-form > .erreurs {
+.jdr-form > .erreurs li {
     padding: 0.7rem 1rem;
-    border: 2px solid #b3261e;
-    border-radius: 6px;
-    background: #fff3f1;
 }
 
-/* ---- Champ image ---- */
+/* ---- Champ image : aperçu carré à gauche, fichier à droite ---- */
+.champ-image {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    grid-template-areas:
+        "titre   titre"
+        "apercu  fichier"
+        "apercu  aide"
+        "apercu  erreurs"
+        "apercu  .";
+    grid-template-rows: auto auto auto auto 1fr;
+    gap: 0.6rem 1.3rem;
+}
+
+.champ-image > label {
+    grid-area: titre;
+}
+
+.champ-image > .apercu-image {
+    grid-area: apercu;
+}
+
+.champ-image > input[type="file"] {
+    grid-area: fichier;
+    align-self: start;
+}
+
+.champ-image > .aide {
+    grid-area: aide;
+}
+
+.champ-image > .erreurs {
+    grid-area: erreurs;
+}
+
 .apercu-image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1; /* aperçu toujours carré */
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 140px;
     padding: 0.6rem;
+    text-align: center;
     border: 2px dashed var(--gold-dim);
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.5);
+    border-radius: 0;
+    background: rgba(255, 255, 255, 0.55);
 }
 
 .apercu-image img {
-    max-width: 100%;
-    max-height: 220px;
-    border: 2px solid var(--gold-dim);
-    border-radius: 6px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* l'image entière reste visible, sans déformation */
+    background: #fffdf6;
 }
 
 .apercu-image img[hidden],
@@ -172,57 +245,156 @@
 }
 
 #apercu-vide {
+    font-size: 0.9rem;
     font-style: italic;
     color: var(--ink-soft);
 }
 
-/* Bouton "Choisir un fichier" aux couleurs du site */
+/* Champ fichier : cadre droit et bouton bordeaux */
 .champ input[type="file"] {
-    padding: 0.4rem;
+    width: 100%;
+    padding: 0.45rem;
     font-family: 'EB Garamond', Georgia, serif;
     color: var(--ink-soft);
+    background: #fffdf6;
+    border: 2px solid var(--gold-dim);
+    border-radius: 0;
 }
 
 .champ input[type="file"]::file-selector-button {
-    margin-right: 0.8rem;
-    padding: 0.4rem 0.9rem;
+    margin-right: 0.9rem;
+    padding: 0.55rem 1rem;
     font-family: 'Cinzel', serif;
-    font-weight: 600;
-    color: var(--bg-deep);
-    background: linear-gradient(180deg, var(--gold-light) 0%, var(--gold) 100%);
-    border: 2px solid var(--gold-dim);
-    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--parchment);
+    background: var(--maroon);
+    border: 0;
+    border-radius: 0;
     cursor: pointer;
+    transition: background 0.15s ease;
 }
 
 .champ input[type="file"]::file-selector-button:hover {
-    box-shadow: 0 4px 12px rgba(201, 162, 74, 0.5);
+    background: var(--maroon-dark);
 }
 
-/* ---- Barre d'actions ---- */
+/* ---- Barre d'actions : reste visible en bas de l'écran pendant le défilement ---- */
 .jdr-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
-    align-items: center;
+    align-items: stretch;
     gap: 0.8rem;
-    padding-top: 1rem;
+    margin: 0 calc(-1 * clamp(1rem, 3vw, 2.2rem)) calc(-1 * clamp(1rem, 3vw, 2.2rem));
+    padding: 0.9rem clamp(1rem, 3vw, 2.2rem);
+    background: var(--parchment-dark);
     border-top: 2px solid var(--gold-dim);
 }
 
-/* ---- Mobile : une seule colonne ---- */
-@media (max-width: 720px) {
+.jdr-actions .button {
+    min-height: 2.9rem;
+    padding: 0 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 0;
+}
+
+/* Annuler : bouton secondaire à contour */
+.jdr-actions .button-petit {
+    color: var(--ink);
+    background: transparent;
+    border: 2px solid var(--ink-soft);
+}
+
+.jdr-actions .button-petit:hover {
+    color: var(--parchment);
+    background: var(--ink-soft);
+    box-shadow: none;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+/* Tablette : on resserre les marges */
+@media (max-width: 860px) {
     .jdr-section {
-        grid-template-columns: 1fr;
-        padding: 1rem;
+        gap: 1rem 1.2rem;
     }
 
+    .champ-image {
+        grid-template-columns: 160px minmax(0, 1fr);
+    }
+}
+
+/* Petit écran : une seule colonne */
+@media (max-width: 720px) {
+    .pancarte.conteneur-formulaire {
+        width: calc(100% - 1rem);
+    }
+
+    .champ,
+    .champ-demi,
+    .champ-tiers {
+        grid-column: 1 / -1;
+    }
+
+    /* Image : aperçu centré au-dessus du champ fichier */
+    .champ-image {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+            "titre"
+            "apercu"
+            "fichier"
+            "aide"
+            "erreurs";
+        grid-template-rows: none;
+    }
+
+    .apercu-image {
+        max-width: 220px;
+        justify-self: center;
+    }
+
+    /* Boutons pleine largeur, "Enregistrer" au-dessus de "Annuler" */
     .jdr-actions {
-        justify-content: stretch;
+        flex-direction: column-reverse;
     }
 
     .jdr-actions .button {
-        flex: 1;
-        text-align: center;
+        width: 100%;
+    }
+}
+
+/* Mobile étroit : on garde un contraste net et des marges minimales */
+@media (max-width: 480px) {
+    .jdr-section {
+        padding: 1.4rem 0.9rem 1.2rem;
+    }
+
+    .jdr-section legend {
+        margin-left: 0.4rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* Respecte le réglage "réduire les animations" du système */
+@media (prefers-reduced-motion: reduce) {
+    .champ input,
+    .champ select,
+    .champ textarea,
+    .champ input[type="file"]::file-selector-button {
+        transition: none;
     }
 }

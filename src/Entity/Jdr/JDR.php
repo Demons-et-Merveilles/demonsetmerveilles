@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Jdr;
 
 use App\Repository\JDRRepository;
 use Doctrine\DBAL\Types\Types;

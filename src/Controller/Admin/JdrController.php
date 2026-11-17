@@ -5,7 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Jdr\PublishedJdr;
 use App\Form\Jdr\PublishedJdrType;
 use App\Repository\Jdr\PublishedJdrRepository;
-use App\Service\JdrImageStorage;
+use App\Service\Jdr\JdrImageStorage;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;

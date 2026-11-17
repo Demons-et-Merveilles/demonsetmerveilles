@@ -4,8 +4,9 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet"/>
-    {# Petits ajustements propres à la version Symfony (liens du menu) #}
     <link href="{{ asset('css/ajouts.css') }}" rel="stylesheet"/>
+    <link href="{{ asset('css/formulaire.css') }}" rel="stylesheet"/>
+    {% block stylesheet %} {% endblock %}
     <title>{% block titre %}Démons et Merveilles{% endblock %}</title>
 </head>
 

@@ -14,6 +14,6 @@ services:
         exclude:
             - '../src/Kernel.php'
 
-    App\Service\JdrService:
+    App\Service\Jdr\JdrService:
         arguments:
             $fichierJdrs: '%app.fichier_jdrs%'

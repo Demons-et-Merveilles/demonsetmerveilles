@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\JDR;
+use App\Entity\Jdr\JDR;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

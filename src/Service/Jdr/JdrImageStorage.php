@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\Jdr;
 
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -20,7 +20,7 @@ final class JdrImageStorage
         IMAGETYPE_WEBP => 'webp',
         IMAGETYPE_GIF => 'gif',
     ];
-    private const TAILLE_MAX = 3 * 1024 * 1024; // 3 Mo
+    private const TAILLE_MAX = 10 * 1024 * 1024; // 10 Mo
 
     public function __construct(
         #[Autowire('%kernel.project_dir%/public/uploads/jdr')]
@@ -39,7 +39,7 @@ final class JdrImageStorage
             throw new \InvalidArgumentException('Envoi de l\'image impossible : '.$fichier->getErrorMessage());
         }
         if ($fichier->getSize() > self::TAILLE_MAX) {
-            throw new \InvalidArgumentException('L\'image dépasse 3 Mo.');
+            throw new \InvalidArgumentException('L\'image dépasse 10 Mo.');
         }
 
         $infos = @getimagesize($fichier->getPathname());
