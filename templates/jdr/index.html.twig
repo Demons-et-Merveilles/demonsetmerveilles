@@ -1,0 +1,60 @@
+{% extends 'jdr/layout.html.twig' %}
+
+{% block title %}Tables de JDR – Démons &amp; Merveilles{% endblock %}
+
+{% block body %}
+{# URLs de l'API lues par jdr.js #}
+{% set urls = {
+    state: path('jdr_state'),
+    addPlayers: path('jdr_players_add'),
+    addGameMaster: path('jdr_game_masters_add'),
+    addTable: path('jdr_tables_add'),
+    move: path('jdr_move'),
+    rename: path('jdr_rename'),
+    delete: path('jdr_delete'),
+    clear: path('jdr_clear')
+} %}
+
+<header>
+    <a class="menu-link" href="{{ path('app_admin') }}">← Menu</a>
+    <h1>Tables de JDR</h1>
+    <p>Glisse un <em>MJ</em> ou un joueur sur la table de ton choix !</p>
+</header>
+
+{# data-state : état initial du plateau (JSON) ; le JS le met à jour après chaque action #}
+<main id="board"
+      data-urls="{{ urls|json_encode }}"
+      data-state="{{ state|json_encode }}"
+      data-csrf-token="{{ csrf_token('jdr') }}">
+
+    {# Colonne de gauche : réserves de MJ et de joueurs #}
+    <aside>
+        <section class="panel">
+            <h2>Maîtres de jeu <button type="button" class="btn" id="addGm">+ MJ</button></h2>
+            <div class="zone pool" id="poolGms" data-zone="pool-gms" data-accepts="gm"></div>
+        </section>
+
+        <section class="panel">
+            <h2>Joueurs <button type="button" class="btn" id="clearTables" title="Remet tout le monde dans la liste">Vider les tables</button></h2>
+            <div class="add-row">
+                <input id="newPlayer" type="text" placeholder="Nom du joueur…" maxlength="30" autocomplete="off">
+                <button type="button" class="btn" id="addPlayer">Ajouter</button>
+            </div>
+            <p class="hint">Astuce : sépare plusieurs noms par une virgule. Clique sur ✎ pour renommer.</p>
+            <div class="zone pool" id="poolPlayers" data-zone="pool-players" data-accepts="player"></div>
+        </section>
+    </aside>
+
+    {# Zone principale : les tables #}
+    <section>
+        <div id="tables"></div>
+        <p class="add-table"><button type="button" class="btn" id="addTable">+ Ajouter une table</button></p>
+    </section>
+</main>
+
+<div id="toast" role="status"></div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/jdr.js') }}"></script>
+{% endblock %}

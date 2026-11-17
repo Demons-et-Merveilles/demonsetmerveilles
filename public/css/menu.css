@@ -1,0 +1,67 @@
+/* ===== Page menu : même charte que les tables de JDR (nuit violine/marine + or + cyan) ===== */
+@font-face {
+  font-family: "Cinzel"; font-weight: 500; font-style: normal; font-display: swap;
+  src: url("../fonts/jdr/cinzel-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Cinzel"; font-weight: 700; font-style: normal; font-display: swap;
+  src: url("../fonts/jdr/cinzel-latin-700-normal.woff2") format("woff2");
+}
+
+:root {
+  --gold: #f6d77b;
+  --gold-dim: #b8963f;
+  --cyan: #4fc3f7;
+  --bg-1: #2a1325;
+  --bg-2: #0d1a3b;
+  --panel: rgba(10, 16, 40, .72);
+  color-scheme: dark;
+  box-sizing: border-box;
+  /* Marges de sécurité pour les téléphones à encoche */
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold);
+  font-family: "Cinzel", Georgia, "Times New Roman", serif;
+  background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 70%) fixed;
+}
+
+.menu { width: 100%; max-width: 720px; padding: 32px 20px; text-align: center; }
+.menu h1 { margin: 0; font-size: clamp(1.6rem, 5vw, 2.6rem); letter-spacing: .06em; }
+.menu h1 span { color: var(--cyan); }
+.menu-subtitle { margin: 8px 0 32px; font-size: .95rem; opacity: .75; }
+
+.menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+
+.menu-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 28px 20px;
+  background: var(--panel);
+  border: 1px solid var(--gold-dim);
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .35);
+  color: var(--gold);
+  text-decoration: none;
+  transition: border-color .15s, transform .15s, box-shadow .15s;
+}
+.menu-card:hover,
+.menu-card:focus-visible {
+  border-color: var(--cyan);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(79, 195, 247, .25);
+  outline: none;
+}
+.menu-icon { font-size: 2.6rem; line-height: 1; }
+.menu-label { font-size: 1.2rem; font-weight: 700; letter-spacing: .04em; }
+.menu-description { font-size: .8rem; opacity: .75; line-height: 1.4; }

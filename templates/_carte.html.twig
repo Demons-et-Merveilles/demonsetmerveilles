@@ -1,33 +1,36 @@
 {#
-    Carte de JDR / invité / animation.
+    Carte de JDR / invité.
     Variables :
-      - carte      : entrée de data/jdr.json
+      - jdr        : entité PublishedJdr
       - impression : true pour la version imprimable (sans lien ni horaire, jamais "double")
-    La description est affichée telle quelle (|raw) : elle peut contenir du HTML dans jdr.json.
+    Les textes sont échappés par Twig ; les retours à la ligne de la description
+    sont conservés par le CSS (white-space: pre-line).
 #}
 {% set impression = impression|default(false) %}
-{% set type = carte.type|default('') %}
-{% set taille = (not impression and carte.format|default('') == 'double') ? 'Double' : '' %}
-{% set maitrise = type == 'jdr' ? 'Masterisé par ' ~ carte.mastering|default('') : carte.mastering|default('') %}
+{% set taille = (not impression and jdr.format.value == 'double') ? 'Double' : '' %}
+{% set nomMj = jdr.masteringName %}
+{% set maitrise = jdr.type.value == 'jdr' ? (nomMj ? 'Masterisé par ' ~ nomMj : '') : nomMj %}
 
-<div class="card{{ taille }} {{ type }}">
-    <div class="card-image-container">
-        <img class="card-image" src="{{ carte.image|default('') }}" alt="Logo du JDR">
-    </div>
+<div class="card{{ taille }} {{ jdr.type.value }}">
+    {% if jdr.image %}
+        <div class="card-image-container">
+            <img class="card-image" src="{{ asset(jdr.image) }}" alt="Illustration de {{ jdr.title }}">
+        </div>
+        <hr class="card-hr"/>
+    {% endif %}
 
-    <hr class="card-hr"/>
     <div class="card-content">
-        <span class="card-title">{{ carte.title|default('') }}</span>
-        <span class="card-description">{{ carte.description|default('')|raw }}</span>
+        <span class="card-title">{{ jdr.title }}</span>
+        <span class="card-description">{{ jdr.description }}</span>
         <span class="card-mastering">
             <h3>
                 {{ maitrise }}
-                {% if not impression and carte.link|default %}
-                    <a href="{{ carte.link }}" style="color:lightblue"> {{ carte.desclink|default('') }} {{ carte.link }} </a>
+                {% if not impression and jdr.link %}
+                    <a href="{{ jdr.link }}" style="color:lightblue"> {{ jdr.linkLabel }} {{ jdr.link }} </a>
                 {% endif %}
             </h3>
-            {% if not impression %}
-                <h3>{{ carte.horaire|default('') }}</h3>
+            {% if not impression and jdr.schedule %}
+                <h3>{{ jdr.schedule }}</h3>
             {% endif %}
         </span>
     </div>

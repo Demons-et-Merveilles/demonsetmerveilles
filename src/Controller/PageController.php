@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Service\JdrService;
+use App\Repository\Jdr\PublishedJdrRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,11 +16,12 @@ final class PageController extends AbstractController
         return $this->render('page/accueil.html.twig');
     }
 
+    // Les JDR publiés viennent de la base ; ils se gèrent dans /admin/jdrs
     #[Route('/jdrs', name: 'app_jdrs')]
-    public function jdrs(JdrService $jdrService): Response
+    public function jdrs(PublishedJdrRepository $jdrs): Response
     {
         return $this->render('page/jdrs.html.twig', [
-            'cartes' => $jdrService->tous(),
+            'jdrs' => $jdrs->ordered(),
         ]);
     }
 
@@ -37,10 +38,10 @@ final class PageController extends AbstractController
      * Page d'impression d'une fiche JDR (sans menu, sans lien).
      */
     #[Route('/print', name: 'app_print')]
-    public function impression(JdrService $jdrService): Response
+    public function impression(PublishedJdrRepository $jdrs): Response
     {
         return $this->render('print.html.twig', [
-            'jdrs' => $jdrService->seulementJdr(),
+            'jdrs' => $jdrs->onlyJdr(),
         ]);
     }
 

@@ -1,0 +1,16 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block titre %}Choisir une session - Démons et Merveilles{% endblock %}
+
+{% block admin_contenu %}
+<div class="div-centre pancarte" style="flex-direction: column;">
+    <h1 class="titre"> Quelle session de vente ? </h1>
+    <p class="actions">
+        {% for session in sessions %}
+            <a class="button" href="{{ path('app_caisse_session', {id: session.id}) }}">
+                {{ session.evenement.nom }} — {{ session.nom }}
+            </a>
+        {% endfor %}
+    </p>
+</div>
+{% endblock %}

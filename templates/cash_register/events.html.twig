@@ -6,7 +6,7 @@
 <div class="events-page">
     <h1 class="logo">Caisse <span>· Évènements</span></h1>
 
-    <p><a class="back-link" href="{{ path('cash_register_product_new') }}">+ Nouvel article</a></p>
+    <p><a class="back-link" href="{{ path('app_admin') }}">⌂ Menu</a> &nbsp;·&nbsp; <a class="back-link" href="{{ path('cash_register_product_new') }}">+ Nouvel article</a></p>
 
     {% for message in app.flashes('error') %}
         <div class="flash-error">{{ message }}</div>

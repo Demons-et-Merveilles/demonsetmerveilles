@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Démons &amp; Merveilles · Menu</title>
+    <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
+</head>
+<body>
+    <main class="menu">
+        <h1>Démons <span>&amp;</span> Merveilles</h1>
+        <p class="menu-subtitle">Choisis un outil</p>
+
+        <nav class="menu-grid">
+            {% for module in modules %}
+                <a class="menu-card" href="{{ path(module.route) }}">
+                    <span class="menu-icon">{{ module.icon }}</span>
+                    <span class="menu-label">{{ module.label }}</span>
+                    <span class="menu-description">{{ module.description }}</span>
+                </a>
+            {% endfor %}
+        </nav>
+    </main>
+</body>
+</html>

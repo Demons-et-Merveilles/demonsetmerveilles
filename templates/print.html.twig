@@ -28,7 +28,7 @@
                     <select id="selectToPrint" style="width:60vw" class="select">
                         <option selected value="-1"> - - - </option>
                         {% for jdr in jdrs %}
-                            <option value="{{ jdr.id }}">{{ jdr.title|default('') }} ({{ jdr.mastering|default('') }})</option>
+                            <option value="{{ jdr.id }}">{{ jdr.title }}{% if jdr.masteringName %} ({{ jdr.masteringName }}){% endif %}</option>
                         {% endfor %}
                     </select>
                 </span>
@@ -43,8 +43,8 @@
     <div class="card-container" id="cardToPrint">
         <p id="aucune-carte" hidden>Aucune carte sélectionnée.</p>
         {% for jdr in jdrs %}
-            <div class="carte-impression" data-id="{{ jdr.id }}" data-titre="{{ jdr.title|default('') }}" hidden>
-                {{ include('_carte.html.twig', {carte: jdr, impression: true}) }}
+            <div class="carte-impression" data-id="{{ jdr.id }}" data-titre="{{ jdr.title }}" hidden>
+                {{ include('_carte.html.twig', {jdr: jdr, impression: true}) }}
             </div>
         {% endfor %}
     </div>

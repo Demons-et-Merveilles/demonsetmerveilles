@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caisse — {{ session.evenement.nom }}</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="{{ asset('css/caisse.css') }}" rel="stylesheet"/>
+</head>
+<body>
+
+{# Les adresses de l'API et le jeton CSRF sont lus par public/js/caisse.js #}
+<div id="app"
+     data-url-produits="{{ path('app_caisse_produits') }}"
+     data-url-produits-export="{{ path('app_caisse_produits_export') }}"
+     data-url-produits-import="{{ path('app_caisse_produits_import') }}"
+     data-url-vente="{{ path('app_caisse_vente', {id: session.id}) }}"
+     data-url-historique="{{ path('app_caisse_historique', {id: session.id}) }}"
+     data-url-historique-export="{{ path('app_caisse_historique_export', {id: session.id}) }}"
+     data-url-historique-import="{{ path('app_caisse_historique_import', {id: session.id}) }}"
+     data-csrf="{{ csrf_token('caisse') }}">
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <!-- Total -->
+    <div id="total-panel">
+      <div class="total-label">Total à payer</div>
+      <div id="total-display">0,00 €</div>
+      <div class="total-sub"><span id="item-count">0 article</span></div>
+    </div>
+
+    <!-- Panier -->
+    <div id="cart-panel">
+      <div class="cart-empty" id="cart-empty">
+        <div class="cart-empty-icon">🛒</div>
+        <span>Panier vide</span>
+      </div>
+      <div id="cart-items"></div>
+    </div>
+
+    <!-- Actions -->
+    <div id="actions-panel">
+      <button class="btn btn-pay" id="btn-pay" disabled>
+        ✓ Encaisser
+      </button>
+      <button class="btn btn-clear" id="btn-clear" disabled>
+        ✕ Vider le panier
+      </button>
+      <div class="sep"></div>
+      <div class="btn-row">
+        <button class="btn btn-history" id="btn-history">Historique</button>
+        <button class="btn btn-import" id="btn-charger-produits">Charger JSON</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main id="main">
+    <div id="header">
+      <div>
+        <div class="logo">Caisse <span>· {{ session.evenement.nom }} — {{ session.nom }}</span></div>
+        <div style="font-size:11px; color:var(--text-dim); margin-top:4px;">
+          Panier <span id="session-id"></span>
+          · <a href="{{ path('app_evenements') }}" style="color:var(--text-mid);">← Évènements</a>
+        </div>
+      </div>
+      <div style="margin-left:auto; font-size:11px; color:var(--text-dim);" id="clock"></div>
+    </div>
+
+    <div id="toolbar">
+      <input type="text" id="search" placeholder="Rechercher un article…">
+      <div id="category-filters" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
+    </div>
+
+    <div id="grid-container">
+      <div id="products-grid"></div>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL ENCAISSEMENT -->
+<div class="modal-overlay" id="modal-receipt">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🧾 Récapitulatif</div>
+      <button class="modal-close" data-fermer="modal-receipt">✕</button>
+    </div>
+    <div id="receipt-items"></div>
+    <div class="receipt-total-row">
+      <span>Total</span>
+      <span id="receipt-total">0,00 €</span>
+    </div>
+    <div class="receipt-meta" id="receipt-meta"></div>
+    <button class="btn btn-confirm-pay" id="btn-confirm-pay">✓ Valider le paiement</button>
+  </div>
+</div>
+
+<!-- MODAL HISTORIQUE -->
+<div class="modal-overlay" id="modal-history">
+  <div class="modal" style="width:680px; max-width:95vw;">
+    <div class="modal-header">
+      <div class="modal-title">📊 Historique des ventes</div>
+      <button class="modal-close" data-fermer="modal-history">✕</button>
+    </div>
+    <div id="history-table-wrap">
+      <table id="history-table">
+        <thead>
+          <tr>
+            <th>ID Panier</th>
+            <th>ID Article</th>
+            <th>Nom</th>
+            <th>Qté</th>
+            <th>Prix unit.</th>
+            <th>Sous-total</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="history-tbody"></tbody>
+      </table>
+    </div>
+    <div class="export-row">
+      <button class="btn btn-export" id="btn-export-historique">⬇ Exporter historique JSON</button>
+      <button class="btn btn-export" id="btn-import-historique">⬆ Importer historique JSON</button>
+      <button class="btn btn-export" id="btn-export-catalogue">⬇ Exporter catalogue JSON</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAYMENT SUCCESS -->
+<div id="pay-success">
+  <div class="pay-success-icon">✅</div>
+  <div class="pay-success-text">Paiement enregistré !</div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- CHAMPS FICHIER CACHÉS -->
+<input type="file" id="fichier-produits" accept=".json" style="display:none">
+<input type="file" id="fichier-historique" accept=".json" style="display:none">
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="{{ asset('js/caisse.js') }}"></script>
+
+</body>
+</html>

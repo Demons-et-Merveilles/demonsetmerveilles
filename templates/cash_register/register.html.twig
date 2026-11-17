@@ -43,6 +43,7 @@
     <main id="main">
         <div id="header">
             <div class="logo">Caisse <span>· {{ event.name }}</span></div>
+            <a class="back-link" href="{{ path('app_admin') }}">⌂ Menu</a>
             <a class="back-link" href="{{ path('cash_register_index') }}">← Évènements</a>
             <a class="back-link" href="{{ path('cash_register_product_new', {event: event.id}) }}">+ Nouvel article</a>
             <div id="clock"></div>

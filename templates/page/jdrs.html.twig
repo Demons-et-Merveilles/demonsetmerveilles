@@ -4,9 +4,11 @@
 
 {% block contenu %}
 <div class="card-container">
-    {# Les cartes viennent de data/jdr.json via JdrService #}
-    {% for carte in cartes %}
-        {{ include('_carte.html.twig', {carte: carte}) }}
+    {# Les cartes viennent de la base de données (gérées dans /admin/jdrs) #}
+    {% for jdr in jdrs %}
+        {{ include('_carte.html.twig', {jdr: jdr}) }}
+    {% else %}
+        <p class="div-centre">Aucun JDR n'est publié pour le moment.</p>
     {% endfor %}
 </div>
 {% endblock %}

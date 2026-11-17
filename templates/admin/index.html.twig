@@ -1,11 +1,15 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/base_admin.html.twig' %}
 
 {% block titre %}Administration - Démons et Merveilles{% endblock %}
 
-{% block contenu %}
-    <div class="div-centre pancarte" style="flex-direction: column;">
-        <h1 class="titre"> Administration </h1>
-        <p class="contenu">Connecté en tant que {{ app.user.userIdentifier }}.</p>
-        <p><a class="button" href="{{ path('app_logout') }}">Se déconnecter</a></p>
-    </div>
+{% block admin_contenu %}
+<div class="div-centre pancarte" style="flex-direction: column;">
+    <h1 class="titre"> Administration </h1>
+    <p class="contenu">Connecté en tant que {{ app.user.userIdentifier }}.</p>
+    <p class="actions">
+        <a class="button" href="{{ path('app_admin_jdrs') }}">🎲 JDRs publiés</a>
+        <a class="button" href="{{ path('app_caisse') }}">🧾 Ouvrir la caisse</a>
+        <a class="button" href="{{ path('app_evenements') }}">📅 Évènements et sessions</a>
+    </p>
+</div>
 {% endblock %}

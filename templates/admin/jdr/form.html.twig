@@ -1,0 +1,73 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{# Le formulaire est construit par App\Form\Jdr\PublishedJdrType et affiché avec notre thème #}
+{% form_theme form 'admin/form_theme.html.twig' %}
+
+{% block titre %}{{ jdr.id ? 'Modifier un JDR' : 'Publier un JDR' }} - Démons et Merveilles{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/formulaire.css') }}" rel="stylesheet"/>
+{% endblock %}
+
+{% block admin_contenu %}
+<div class="div-centre pancarte conteneur-formulaire" style="flex-direction: column;">
+    <h1 class="titre"> {{ jdr.id ? 'Modifier « ' ~ jdr.title ~ ' »' : 'Publier un JDR' }} </h1>
+
+    {{ form_start(form, {attr: {class: 'jdr-form', novalidate: 'novalidate'}}) }}
+
+        {# Erreurs globales (ex : jeton CSRF expiré) #}
+        {{ form_errors(form) }}
+
+        <fieldset class="jdr-section">
+            <legend>Présentation</legend>
+            {{ form_row(form.type) }}
+            {{ form_row(form.format) }}
+            {{ form_row(form.title) }}
+            {{ form_row(form.description) }}
+        </fieldset>
+
+        <fieldset class="jdr-section">
+            <legend>Maître de jeu et horaire</legend>
+            {{ form_row(form.gameMaster) }}
+            {{ form_row(form.schedule) }}
+            {{ form_row(form.subtitle) }}
+        </fieldset>
+
+        <fieldset class="jdr-section">
+            <legend>Lien</legend>
+            {{ form_row(form.link) }}
+            {{ form_row(form.linkLabel) }}
+        </fieldset>
+
+        <fieldset class="jdr-section">
+            <legend>Image et affichage</legend>
+
+            {# Champ image : aperçu de l'image actuelle ou de celle qui vient d'être choisie (jdr-form.js) #}
+            <div class="champ champ-large champ-image{{ form.image.vars.valid ? '' : ' champ-erreur' }}">
+                {{ form_label(form.image) }}
+                <div class="apercu-image">
+                    <img id="apercu-image" alt="Aperçu de l'image"
+                         {% if jdr.image %}src="{{ asset(jdr.image) }}"{% else %}hidden{% endif %}>
+                    <span id="apercu-vide" {% if jdr.image %}hidden{% endif %}>Aucune image</span>
+                </div>
+                {{ form_widget(form.image) }}
+                {{ form_help(form.image) }}
+                {{ form_errors(form.image) }}
+            </div>
+
+            {{ form_row(form.displayOrder) }}
+        </fieldset>
+
+        <div class="jdr-actions">
+            <a class="button button-petit" href="{{ path('app_admin_jdrs') }}">Annuler</a>
+            <button type="submit" class="button">{{ jdr.id ? 'Enregistrer les modifications' : 'Publier' }}</button>
+        </div>
+
+    {{ form_end(form) }}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/jdr-form.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,39 @@
+{#
+    Thème de formulaire du site : même structure HTML que Symfony, avec nos classes CSS.
+    Utilisation : {% form_theme form 'admin/form_theme.html.twig' %}
+    Styles associés : public/css/formulaire.css
+#}
+{% extends 'form_div_layout.html.twig' %}
+
+{# Une ligne de formulaire = <div class="champ ..."> : libellé, champ, aide, erreurs #}
+{% block form_row -%}
+    {%- set classe_ligne = ('champ ' ~ (row_attr.class|default('')) ~ (valid ? '' : ' champ-erreur'))|trim -%}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~ '_help'}} -%}
+    {%- endif -%}
+    <div{% with {attr: row_attr|merge({class: classe_ligne})} %}{{ block('attributes') }}{% endwith %}>
+        {{- form_label(form) -}}
+        {{- form_widget(form, widget_attr) -}}
+        {{- form_help(form) -}}
+        {{- form_errors(form) -}}
+    </div>
+{%- endblock form_row %}
+
+{# Texte d'aide sous le champ #}
+{% block form_help -%}
+    {%- if help is not empty -%}
+        <small id="{{ id }}_help" class="aide">{{ help }}</small>
+    {%- endif -%}
+{%- endblock form_help %}
+
+{# Erreurs : une ligne par message, avec une icône ajoutée par le CSS #}
+{% block form_errors -%}
+    {%- if errors|length > 0 -%}
+        <ul class="erreurs">
+            {%- for error in errors -%}
+                <li>{{ error.message }}</li>
+            {%- endfor -%}
+        </ul>
+    {%- endif -%}
+{%- endblock form_errors %}

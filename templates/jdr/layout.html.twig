@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#2a1325">
+    <title>{% block title %}Tables de JDR{% endblock %}</title>
+    <link rel="stylesheet" href="{{ asset('css/jdr.css') }}">
+</head>
+<body>
+    {% block body %}{% endblock %}
+
+    {# Si jQuery est déjà chargé par ton layout principal, supprime cette ligne #}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    {% block javascripts %}{% endblock %}
+</body>
+</html>

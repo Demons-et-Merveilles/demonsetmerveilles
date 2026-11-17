@@ -1,0 +1,47 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block titre %}{{ session.nom }} - Démons et Merveilles{% endblock %}
+
+{% block admin_contenu %}
+<div class="div-centre pancarte" style="flex-direction: column;">
+    <h1 class="titre"> {{ session.evenement.nom }} — {{ session.nom }} </h1>
+    <p class="contenu">
+        Ouverte le {{ session.ouverteLe|date('d/m/Y H:i') }}
+        {% if session.estArchivee %}· archivée le {{ session.archiveeLe|date('d/m/Y H:i') }}{% endif %}
+        {% if session.evenement.estArchive %}· évènement archivé{% endif %}
+    </p>
+    <p class="contenu">{{ ventes|length }} vente(s) · Total : <strong>{{ total|number_format(2, ',', ' ') }} €</strong></p>
+
+    <p class="actions">
+        {% if session.estOuverte %}
+            <a class="button button-petit" href="{{ path('app_caisse_session', {id: session.id}) }}">Ouvrir la caisse</a>
+        {% endif %}
+        <a class="button button-petit" href="{{ path('app_caisse_historique_export', {id: session.id}) }}">⬇ Exporter l'historique JSON</a>
+        <a class="button button-petit" href="{{ path('app_evenements') }}">← Évènements</a>
+    </p>
+
+    {% if ventes|length == 0 %}
+        <p class="contenu">Aucune vente enregistrée.</p>
+    {% else %}
+        <table class="admin-table">
+            <thead>
+                <tr><th>Panier</th><th>Date</th><th>Articles</th><th>Total</th></tr>
+            </thead>
+            <tbody>
+            {% for vente in ventes|reverse %}
+                <tr>
+                    <td>{{ vente.reference }}</td>
+                    <td>{{ vente.dateVente|date('d/m/Y H:i') }}</td>
+                    <td>
+                        {% for ligne in vente.lignes %}
+                            {{ ligne.quantite }} × {{ ligne.produitNom }}{% if not loop.last %}<br>{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>{{ vente.total|number_format(2, ',', ' ') }} €</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>
+{% endblock %}

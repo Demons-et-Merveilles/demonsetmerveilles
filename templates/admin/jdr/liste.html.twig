@@ -1,0 +1,67 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block titre %}JDRs publiés - Démons et Merveilles{% endblock %}
+
+{% block admin_contenu %}
+<div class="div-centre pancarte bloc-evenement" style="flex-direction: column;">
+    <h1 class="titre"> JDRs publiés </h1>
+
+    <p class="actions">
+        <a class="button" href="{{ path('app_admin_jdr_nouveau') }}">+ Publier un JDR</a>
+        <a class="button button-petit" href="{{ path('app_jdrs') }}" target="_blank" rel="noopener">Voir la page publique</a>
+    </p>
+
+    {% if jdrs|length == 0 %}
+        <p class="contenu">Aucun JDR publié pour le moment.</p>
+    {% else %}
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Ordre</th>
+                    <th></th>
+                    <th>Titre</th>
+                    <th>Type</th>
+                    <th>MJ / invité</th>
+                    <th>Horaire</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for jdr in jdrs %}
+                <tr>
+                    <td>{{ jdr.displayOrder }}</td>
+                    <td>
+                        {% if jdr.image %}
+                            <img class="miniature" src="{{ asset(jdr.image) }}" alt="">
+                        {% endif %}
+                    </td>
+                    <td>{{ jdr.title }}</td>
+                    <td>
+                        <span class="badge {{ jdr.type.value == 'jdr' ? 'badge-ouverte' : 'badge-archive' }}">{{ jdr.type.value == 'jdr' ? 'JDR' : 'Invité' }}</span>
+                        {% if jdr.format.value == 'double' %}<span class="badge badge-archive">Double</span>{% endif %}
+                    </td>
+                    <td>
+                        {% if jdr.gameMaster %}
+                            {{ jdr.gameMaster.name }}
+                        {% elseif jdr.subtitle %}
+                            {{ jdr.subtitle }} <em>(texte libre)</em>
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                    <td>{{ jdr.schedule|default('—') }}</td>
+                    <td class="actions">
+                        <a class="button button-petit" href="{{ path('app_admin_jdr_modifier', {id: jdr.id}) }}">Modifier</a>
+                        <form method="post" action="{{ path('app_admin_jdr_supprimer', {id: jdr.id}) }}"
+                              onsubmit="return confirm('Supprimer définitivement « {{ jdr.title|e('js') }} » ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('jdr_' ~ jdr.id) }}">
+                            <button type="submit" class="button button-petit">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>
+{% endblock %}

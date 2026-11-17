@@ -1,0 +1,228 @@
+/* ============================================================
+   FORMULAIRE DE JDR — thème parchemin / dorure
+   S'appuie sur les variables de style.css (--gold, --maroon, --ink…)
+   Structure : .jdr-form > fieldset.jdr-section > .champ (label, champ, aide, erreurs)
+   ============================================================ */
+
+.conteneur-formulaire {
+    width: calc(100% - 2rem);
+    max-width: 880px;
+}
+
+.jdr-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.3rem;
+    text-align: left;
+}
+
+/* ---- Sections (cadres dorés) ---- */
+.jdr-section {
+    margin: 0;
+    padding: 1.1rem 1.3rem 1.3rem;
+    border: 2px solid var(--gold-dim);
+    border-radius: var(--radius-plaque);
+    background: rgba(255, 255, 255, 0.35);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 1.3rem;
+}
+
+.jdr-section legend {
+    padding: 0 0.7rem;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 0.04em;
+    color: var(--maroon);
+}
+
+/* ---- Un champ ---- */
+.champ {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0; /* évite qu'un champ large déborde de la grille */
+}
+
+.champ-large {
+    grid-column: 1 / -1;
+}
+
+.champ label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+}
+
+/* Astérisque sur les champs obligatoires */
+.champ label.required::after {
+    content: ' *';
+    color: var(--maroon);
+}
+
+.champ input[type="text"],
+.champ input[type="url"],
+.champ input[type="number"],
+.champ select,
+.champ textarea {
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 1.05rem;
+    color: var(--ink);
+    background: #fffdf6;
+    border: 2px solid var(--gold-dim);
+    border-radius: 6px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.champ textarea {
+    resize: vertical;
+    min-height: 8rem;
+    line-height: 1.45;
+}
+
+.champ input::placeholder,
+.champ textarea::placeholder {
+    color: #9a8a68;
+    font-style: italic;
+}
+
+.champ input:hover,
+.champ select:hover,
+.champ textarea:hover {
+    border-color: var(--gold);
+}
+
+.champ input:focus,
+.champ select:focus,
+.champ textarea:focus {
+    outline: none;
+    border-color: var(--maroon);
+    box-shadow: 0 0 0 3px rgba(201, 162, 74, 0.45);
+}
+
+/* ---- Aide et erreurs ---- */
+.aide {
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--ink-soft);
+}
+
+.erreurs {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.erreurs li {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #8c1b1b;
+}
+
+.erreurs li::before {
+    content: '⚠ ';
+}
+
+.champ-erreur input[type="text"],
+.champ-erreur input[type="url"],
+.champ-erreur input[type="number"],
+.champ-erreur select,
+.champ-erreur textarea {
+    border-color: #b3261e;
+    background: #fff3f1;
+}
+
+/* Erreurs globales du formulaire (ex : jeton CSRF expiré) */
+.jdr-form > .erreurs {
+    padding: 0.7rem 1rem;
+    border: 2px solid #b3261e;
+    border-radius: 6px;
+    background: #fff3f1;
+}
+
+/* ---- Champ image ---- */
+.apercu-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 140px;
+    padding: 0.6rem;
+    border: 2px dashed var(--gold-dim);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.apercu-image img {
+    max-width: 100%;
+    max-height: 220px;
+    border: 2px solid var(--gold-dim);
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.apercu-image img[hidden],
+.apercu-image span[hidden] {
+    display: none;
+}
+
+#apercu-vide {
+    font-style: italic;
+    color: var(--ink-soft);
+}
+
+/* Bouton "Choisir un fichier" aux couleurs du site */
+.champ input[type="file"] {
+    padding: 0.4rem;
+    font-family: 'EB Garamond', Georgia, serif;
+    color: var(--ink-soft);
+}
+
+.champ input[type="file"]::file-selector-button {
+    margin-right: 0.8rem;
+    padding: 0.4rem 0.9rem;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    color: var(--bg-deep);
+    background: linear-gradient(180deg, var(--gold-light) 0%, var(--gold) 100%);
+    border: 2px solid var(--gold-dim);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.champ input[type="file"]::file-selector-button:hover {
+    box-shadow: 0 4px 12px rgba(201, 162, 74, 0.5);
+}
+
+/* ---- Barre d'actions ---- */
+.jdr-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.8rem;
+    padding-top: 1rem;
+    border-top: 2px solid var(--gold-dim);
+}
+
+/* ---- Mobile : une seule colonne ---- */
+@media (max-width: 720px) {
+    .jdr-section {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+
+    .jdr-actions {
+        justify-content: stretch;
+    }
+
+    .jdr-actions .button {
+        flex: 1;
+        text-align: center;
+    }
+}

@@ -1,0 +1,120 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block titre %}Évènements - Démons et Merveilles{% endblock %}
+
+{# Tableau des sessions d'un évènement (macro réutilisée pour actifs et archivés) #}
+{% macro sessions(evenement, stats) %}
+    {% if evenement.sessions|length == 0 %}
+        <p class="contenu">Aucune session de vente pour cet évènement.</p>
+    {% else %}
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Session</th>
+                    <th>Ouverte le</th>
+                    <th>Ventes</th>
+                    <th>Total</th>
+                    <th>Statut</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for session in evenement.sessions %}
+                {% set stat = stats[session.id]|default({nbVentes: 0, total: 0}) %}
+                <tr>
+                    <td>{{ session.nom }}</td>
+                    <td>{{ session.ouverteLe|date('d/m/Y H:i') }}</td>
+                    <td>{{ stat.nbVentes }}</td>
+                    <td>{{ stat.total|number_format(2, ',', ' ') }} €</td>
+                    <td>
+                        {% if session.estArchivee %}
+                            <span class="badge badge-archive">Archivée le {{ session.archiveeLe|date('d/m/Y') }}</span>
+                        {% elseif evenement.estArchive %}
+                            <span class="badge badge-archive">Évènement archivé</span>
+                        {% else %}
+                            <span class="badge badge-ouverte">Ouverte</span>
+                        {% endif %}
+                    </td>
+                    <td class="actions">
+                        {% if session.estOuverte %}
+                            <a class="button button-petit" href="{{ path('app_caisse_session', {id: session.id}) }}">Caisse</a>
+                        {% endif %}
+                        <a class="button button-petit" href="{{ path('app_session_detail', {id: session.id}) }}">Détail</a>
+                        {% if not evenement.estArchive %}
+                            <form method="post" action="{{ path(session.estArchivee ? 'app_session_desarchiver' : 'app_session_archiver', {id: session.id}) }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token('session_' ~ session.id) }}">
+                                <button type="submit" class="button button-petit">{{ session.estArchivee ? 'Rouvrir' : 'Archiver' }}</button>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endmacro %}
+
+{% import _self as m %}
+
+{% block admin_contenu %}
+<div class="div-centre pancarte" style="flex-direction: column;">
+    <h1 class="titre"> Nouvel évènement </h1>
+    <form method="post" action="{{ path('app_evenement_nouveau') }}" class="formulaire-admin">
+        <input type="hidden" name="_token" value="{{ csrf_token('evenement_nouveau') }}">
+        <label for="nom">Nom</label>
+        <input type="text" id="nom" name="nom" maxlength="150" required placeholder="Ex : Les Mondes de Démons et Merveilles 2027">
+        <label for="date_debut">Date de début</label>
+        <input type="date" id="date_debut" name="date_debut">
+        <label for="date_fin">Date de fin</label>
+        <input type="date" id="date_fin" name="date_fin">
+        <button type="submit" class="button">Créer l'évènement</button>
+    </form>
+</div>
+
+{% for evenement in actifs %}
+    <div class="div-centre pancarte bloc-evenement" style="flex-direction: column;">
+        <h1 class="titre"> {{ evenement.nom }} </h1>
+        <p class="contenu">
+            {% if evenement.dateDebut %}Du {{ evenement.dateDebut|date('d/m/Y') }}{% endif %}
+            {% if evenement.dateFin %} au {{ evenement.dateFin|date('d/m/Y') }}{% endif %}
+        </p>
+
+        {{ m.sessions(evenement, stats) }}
+
+        <div class="actions">
+            <form method="post" action="{{ path('app_session_nouvelle', {id: evenement.id}) }}" class="formulaire-inline">
+                <input type="hidden" name="_token" value="{{ csrf_token('session_nouvelle_' ~ evenement.id) }}">
+                <input type="text" name="nom" maxlength="150" placeholder="Nom de la session (ex : Samedi après-midi)">
+                <button type="submit" class="button button-petit">+ Ouvrir une session</button>
+            </form>
+            <form method="post" action="{{ path('app_evenement_archiver', {id: evenement.id}) }}"
+                  onsubmit="return confirm('Archiver cet évènement ? Ses sessions ne seront plus utilisables en caisse.');">
+                <input type="hidden" name="_token" value="{{ csrf_token('evenement_' ~ evenement.id) }}">
+                <button type="submit" class="button button-petit">📦 Archiver l'évènement</button>
+            </form>
+        </div>
+    </div>
+{% else %}
+    <p class="div-centre">Aucun évènement en cours.</p>
+{% endfor %}
+
+{% if archives|length > 0 %}
+    <div class="div-centre"><h1 class="title">Archives</h1></div>
+    {% for evenement in archives %}
+        <div class="div-centre pancarte bloc-evenement" style="flex-direction: column;">
+            <h1 class="titre"> {{ evenement.nom }} </h1>
+            <p class="contenu">
+                {% if evenement.dateDebut %}Du {{ evenement.dateDebut|date('d/m/Y') }}{% endif %}
+                {% if evenement.dateFin %} au {{ evenement.dateFin|date('d/m/Y') }}{% endif %}
+            </p>
+
+            {{ m.sessions(evenement, stats) }}
+
+            <form method="post" action="{{ path('app_evenement_desarchiver', {id: evenement.id}) }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('evenement_' ~ evenement.id) }}">
+                <button type="submit" class="button button-petit">↩ Restaurer l'évènement</button>
+            </form>
+        </div>
+    {% endfor %}
+{% endif %}
+{% endblock %}
